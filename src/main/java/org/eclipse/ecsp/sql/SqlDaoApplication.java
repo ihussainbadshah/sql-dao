@@ -44,16 +44,34 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**
- * Main component to load all the Spring components into the context of the implementing service. <br>
- * <br>
- * It allows scanning all the classes inside org.eclipse.ecsp packages
- * including the dependent libraries like utils and allowing loading of the
- * beans from the dependencies.
+ * Main application class for configuring and initializing the SQL DAO module.
+ * <p>
+ * This class is responsible for:
+ * <ul>
+ *   <li>Scanning and loading Spring components from the specified base packages.</li>
+ *   <li>Providing configuration for the SQL DAO module and its dependencies.</li>
+ *   <li>Enabling the integration of utility libraries and dependent beans into the Spring context.</li>
+ * </ul>
+ * <p>
+ * The `@ComponentScan` annotation ensures that all classes within the `org.eclipse.ecsp` package
+ * and its sub-packages are scanned and registered as Spring beans.
+ * <p>
+ * Annotations used:
+ * <ul>
+ *   <li>`@ComponentScan` - Specifies the base packages to scan for Spring components.</li>
+ *   <li>`@Component` - Marks this class as a Spring component.</li>
+ *   <li>`@Configuration` - Indicates that this class contains Spring configuration.</li>
+ * </ul>
+ * <p>
+ * This class serves as the entry point for setting up the SQL DAO module in a Spring-based application.
  *
+ * @author kaushalaroraharman
+ * @version 1.1
+ * @since 2025-04-15
  */
 @ComponentScan(basePackages = {"org.eclipse.ecsp"})
 @Component
 @Configuration
-public class IgniteSqlDaoApplication {
+public class SqlDaoApplication {
 
 }

@@ -101,6 +101,8 @@ class PostgresDbHealthTest {
         assertEquals("cachePrepStmts", PostgresDbConstants.POSTGRES_DS_CACHE_PREPARED_STATEMENTS);
         assertEquals("prepStmtCacheSize", PostgresDbConstants.POSTGRES_DS_PREPARED_STATEMENT_CACHE_SIZE);
         assertEquals("prepStmtCacheSqlLimit", PostgresDbConstants.POSTGRES_DS_PREPARED_STATEMENT_CACHE_SQL_LIMIT);
+        assertEquals("postgres.refreshCheckInterval", PostgresDbConstants.POSTGRES_REFRESH_CHECK_INTERVAL);
+        assertEquals("postgres.credentials.refresh.enabled", PostgresDbConstants.POSTGRES_CREDENTIALS_REFRESH_ENABLED);
         assertEquals("postgres.data-source-properties.cachePrepStmts",
                 PostgresDbConstants.POSTGRES_DS_CACHE_PREPARED_STATEMENTS_VALUE);
         assertEquals("postgres.data-source-properties.prepStmtCacheSize",

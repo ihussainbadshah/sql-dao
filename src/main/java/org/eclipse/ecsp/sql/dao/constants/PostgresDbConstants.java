@@ -78,6 +78,12 @@ public class PostgresDbConstants {
     /** The Constant POSTGRES_CONNECTION_TIMEOUT_MS. */
     public static final String POSTGRES_CONNECTION_TIMEOUT_MS = "postgres.connection.timeout.ms";
     
+    /** The Constant POSTGRES_REFRESH_CHECK_INTERVAL. */
+    public static final String POSTGRES_REFRESH_CHECK_INTERVAL = "postgres.refreshCheckInterval";
+    
+    /** The Constant POSTGRES_CREDENTIALS_REFRESH_ENABLED. */
+    public static final String POSTGRES_CREDENTIALS_REFRESH_ENABLED = "postgres.credentials.refresh.enabled";
+    
     /** The Constant POSTGRES_DS_CACHE_PREPARED_STATEMENTS. */
     public static final String POSTGRES_DS_CACHE_PREPARED_STATEMENTS = "cachePrepStmts";
     

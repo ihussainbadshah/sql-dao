@@ -61,6 +61,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -76,12 +78,37 @@ import static org.postgresql.PGProperty.SSL_RESPONSE_TIMEOUT;
 import static org.postgresql.PGProperty.SSL_ROOT_CERT;
 
 /**
- * PostgresDB pooled connection configuration class.
- * <br>
- * Uses HikariCP for connection pooling to the Postgres DB.
- * <br>
+ * Configuration class for managing PostgresDB connections using HikariCP.
+ * <p>
+ * This class provides the following functionalities:
+ * <ul>
+ *   <li>Configures a HikariCP connection pool for PostgresDB.</li>
+ *   <li>Supports retry mechanisms for connection and datasource creation.</li>
+ *   <li>Validates PostgresDB connection properties.</li>
+ *   <li>Manages lifecycle events such as initialization and cleanup of connections and datasource.</li>
+ *   <li>Supports one-way TLS authentication for secure communication with PostgresDB.</li>
+ *   <li>Integrates with Spring for dependency injection and bean management.</li>
+ *   <li>Exports health and metrics information for monitoring.</li>
+ *   <li>Refreshes credentials if enabled.</li>
+ * </ul>
+ * <p>
+ * This class ensures graceful shutdown of connections and the datasource during application termination.
+ * <p>
+ * Dependencies:
+ * <ul>
+ *   <li>HikariCP for connection pooling</li>
+ *   <li>Dropwizard Metrics for health and metrics monitoring</li>
+ *   <li>Spring Framework for dependency injection</li>
+ * </ul>
+ * <p>
+ * Note: Ensure that all required PostgresDB properties are correctly configured in the environment.
+ *
+ * @author kaushalaroraharman
+ * @version 1.1
+ * @since 2025-04-15
  */
 @Configuration
+@EnableScheduling
 public class PostgresDbConfig {
 
     /** The Constant LOGGER. */
@@ -168,6 +195,10 @@ public class PostgresDbConfig {
     @Value("${" + CredentialsConstants.CREDENTIAL_PROVIDER_BEAN_NAME + " :defaultPostgresDbCredentialsProvider}")
     private String credentialProviderBeanName;
     
+    /** The flag representing credentials refresh enabled or not for postgres. */
+    @Value("${" + PostgresDbConstants.POSTGRES_CREDENTIALS_REFRESH_ENABLED + ":false}")
+    private boolean postgresCredRefreshEnabled;
+    
     /** The data source retry count. 
      * Default: 3
      */
@@ -235,6 +266,42 @@ public class PostgresDbConfig {
             LOGGER.error("Datasource bean is not initialized");
         }
         return dataSource;
+    }
+
+    /**
+     * Refresh the PostgresDB credentials from a source and create pooled connections.
+     * <br>
+     * Scheduled to run at a fixed delay interval.
+     * <br>
+     * Retries for a specified number of times if the connection is not obtained.
+     * <br>
+     *
+     * @throws SQLException - if there is an exception in connecting to the database.
+     * @throws InterruptedException - if the connection is interrupted.
+     */
+    @Scheduled(fixedDelayString = "${" + PostgresDbConstants.POSTGRES_REFRESH_CHECK_INTERVAL + ":86400000}")
+    public void postgresCredsRefreshJob() throws SQLException, InterruptedException {
+        if (!postgresCredRefreshEnabled) {
+            LOGGER.info("Postgres credentials refresh is disabled. Skipping the scheduled job.");
+            return;
+        }
+        LOGGER.info("Starting Postgres refresh Job...");
+        credentialsProvider.refreshCredentials();
+        LOGGER.info("Completed Postgres refresh Job.");
+
+        userName = credentialsProvider.getUserName();
+        password = credentialsProvider.getPassword();
+
+        cleanupConnections();
+        LOGGER.info("Creating connection with refreshed credentials...");
+        try {
+            connection = createConnections();
+            LOGGER.info("Connection created successfully with refreshed credentials.");
+        }
+        catch (Exception exception)
+        {
+            this.retryConnectionCreation();
+        }
     }
 
     /**

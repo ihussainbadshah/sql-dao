@@ -39,7 +39,7 @@
 
 package org.eclipse.ecsp.sql.authentication;
 
-import org.eclipse.ecsp.sql.IgniteSqlDaoApplication;
+import org.eclipse.ecsp.sql.SqlDaoApplication;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ import static org.junit.Assert.assertNotNull;
  * Test for class {@link DefaultPostgresDbCredentialsProvider}.
  */
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { IgniteSqlDaoApplication.class })
+@ContextConfiguration(classes = { SqlDaoApplication.class })
 @TestPropertySource("/application-dao-test.properties")
 public class DefaultPostgresDbCredentialsProviderTest {
 
