@@ -105,7 +105,7 @@
 		<sonar.language>java</sonar.language>
 		<checkstyle.version>10.13.0</checkstyle.version>
 		<maven.checkstyle.version>3.3.1</maven.checkstyle.version>
-		<checkstyle.config.location>${project.basedir}/harman_checks.xml</checkstyle.config.location>
+		<checkstyle.config.location>${project.basedir}/checkstyle.xml</checkstyle.config.location>
 		<checkstyle.suppressions.location>${project.basedir}/checkstyle-suppressions.xml
 		</checkstyle.suppressions.location>
 		<sonar.java.checkstyle.reportPaths>${project.build.directory}/checkstyle-result.xml
