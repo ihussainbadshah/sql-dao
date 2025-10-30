@@ -52,7 +52,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Unit test for {@link TenantContext}.
@@ -81,11 +85,36 @@ class TenantContextTest {
     }
 
     @Test
-    @DisplayName("Should return default tenant when no tenant is set")
-    void testGetCurrentTenant_NoTenantSet() {
-        assertThrows(TenantNotFoundException.class, () -> {
-            TenantContext.getCurrentTenant();
-        });
+    @DisplayName("Should return default tenant when no tenant is set in single-tenant mode")
+    void testGetCurrentTenant_NoTenantSet_SingleTenantMode() {
+        // Given: Multitenancy is disabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "false");
+        
+        try {
+            // Then: Default tenant is returned
+            assertThrows(TenantNotFoundException.class, () -> {
+                TenantContext.getCurrentTenant();
+            });
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+        }
+    }
+
+    @Test
+    @DisplayName("Should throw exception when no tenant is set in multi-tenant mode")
+    void testGetCurrentTenant_NoTenantSet_MultiTenantMode() {
+        // Given: Multitenancy is enabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "true");
+        
+        try {
+            // When/Then: Getting tenant without setting it throws exception
+            TenantNotFoundException exception = assertThrows(TenantNotFoundException.class, () -> {
+                TenantContext.getCurrentTenant();
+            });
+            assertTrue(exception.getMessage().contains("multitenant mode"));
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+        }
     }
 
     @Test
@@ -100,36 +129,114 @@ class TenantContextTest {
     }
 
     @Test
-    @DisplayName("Should handle null tenant by setting default")
-    void testSetCurrentTenant_Null_SetsDefault() {
-        // When: Setting null tenant
-        TenantContext.setCurrentTenant(null);
+    @DisplayName("Should handle null tenant by setting default in single-tenant mode")
+    void testSetCurrentTenant_Null_SetsDefault_SingleTenantMode() {
+        // Given: Multitenancy is disabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "false");
+        
+        try {
+            // When: Setting null tenant
+            TenantContext.setCurrentTenant(null);
 
-        // Then: Default tenant is set
-        assertEquals(MultitenantConstants.DEFAULT_TENANT_ID, TenantContext.getCurrentTenant());
-        assertTrue(TenantContext.hasTenant());
+            // Then: Default tenant is set
+            assertEquals(MultitenantConstants.DEFAULT_TENANT_ID, TenantContext.getCurrentTenant());
+            assertTrue(TenantContext.hasTenant());
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+            TenantContext.clear();
+        }
     }
 
     @Test
-    @DisplayName("Should handle empty string tenant by setting default")
-    void testSetCurrentTenant_EmptyString_SetsDefault() {
-        // When: Setting empty string tenant
-        TenantContext.setCurrentTenant("");
-
-        // Then: Default tenant is set
-        assertEquals(MultitenantConstants.DEFAULT_TENANT_ID, TenantContext.getCurrentTenant());
-        assertTrue(TenantContext.hasTenant());
+    @DisplayName("Should throw exception for null tenant in multi-tenant mode")
+    void testSetCurrentTenant_Null_ThrowsException_MultiTenantMode() {
+        // Given: Multitenancy is enabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "true");
+        
+        try {
+            // When/Then: Setting null tenant throws exception
+            TenantNotFoundException exception = assertThrows(TenantNotFoundException.class, () -> {
+                TenantContext.setCurrentTenant(null);
+            });
+            assertTrue(exception.getMessage().contains("multitenant mode"));
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+            TenantContext.clear();
+        }
     }
 
     @Test
-    @DisplayName("Should handle whitespace-only tenant by setting default")
-    void testSetCurrentTenant_Whitespace_SetsDefault() {
-        // When: Setting whitespace-only tenant
-        TenantContext.setCurrentTenant("   ");
+    @DisplayName("Should handle empty string tenant by setting default in single-tenant mode")
+    void testSetCurrentTenant_EmptyString_SetsDefault_SingleTenantMode() {
+        // Given: Multitenancy is disabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "false");
+        
+        try {
+            // When: Setting empty string tenant
+            TenantContext.setCurrentTenant("");
 
-        // Then: Default tenant is set
-        assertEquals(MultitenantConstants.DEFAULT_TENANT_ID, TenantContext.getCurrentTenant());
-        assertTrue(TenantContext.hasTenant());
+            // Then: Default tenant is set
+            assertEquals(MultitenantConstants.DEFAULT_TENANT_ID, TenantContext.getCurrentTenant());
+            assertTrue(TenantContext.hasTenant());
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+            TenantContext.clear();
+        }
+    }
+
+    @Test
+    @DisplayName("Should throw exception for empty string in multi-tenant mode")
+    void testSetCurrentTenant_EmptyString_ThrowsException_MultiTenantMode() {
+        // Given: Multitenancy is enabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "true");
+        
+        try {
+            // When/Then: Setting empty string throws exception
+            TenantNotFoundException exception = assertThrows(TenantNotFoundException.class, () -> {
+                TenantContext.setCurrentTenant("");
+            });
+            assertTrue(exception.getMessage().contains("multitenant mode"));
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+            TenantContext.clear();
+        }
+    }
+
+    @Test
+    @DisplayName("Should handle whitespace-only tenant by setting default in single-tenant mode")
+    void testSetCurrentTenant_Whitespace_SetsDefault_SingleTenantMode() {
+        // Given: Multitenancy is disabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "false");
+        
+        try {
+            // When: Setting whitespace-only tenant
+            TenantContext.setCurrentTenant("   ");
+
+            // Then: Default tenant is set
+            assertEquals(MultitenantConstants.DEFAULT_TENANT_ID, TenantContext.getCurrentTenant());
+            assertTrue(TenantContext.hasTenant());
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+            TenantContext.clear();
+        }
+    }
+
+    @Test
+    @DisplayName("Should throw exception for whitespace-only in multi-tenant mode")
+    void testSetCurrentTenant_Whitespace_ThrowsException_MultiTenantMode() {
+        // Given: Multitenancy is enabled
+        System.setProperty(MultitenantConstants.MULTITENANCY_ENABLED, "true");
+        
+        try {
+            // When/Then: Setting whitespace-only throws exception
+            TenantNotFoundException exception = assertThrows(TenantNotFoundException.class, () -> {
+                TenantContext.setCurrentTenant("   ");
+            });
+            assertTrue(exception.getMessage().contains("multitenant mode"));
+        } finally {
+            System.clearProperty(MultitenantConstants.MULTITENANCY_ENABLED);
+            TenantContext.clear();
+        }
     }
 
     @Test

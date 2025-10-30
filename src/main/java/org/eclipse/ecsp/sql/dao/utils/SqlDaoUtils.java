@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SqlDaoUtils {
 
+    /** The logger. */
     private static final Logger log = LoggerFactory.getLogger(SqlDaoUtils.class);
+    
     /** The application context. */
     @Autowired
     private ApplicationContext ctx;

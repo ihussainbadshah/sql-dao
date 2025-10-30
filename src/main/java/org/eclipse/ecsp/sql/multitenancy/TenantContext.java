@@ -52,14 +52,18 @@ import org.eclipse.ecsp.utils.logger.IgniteLoggerFactory;
  */
 public class TenantContext {
 
+    /** Logger for tenant context */
     public static final IgniteLogger LOGGER = IgniteLoggerFactory.getLogger(TenantContext.class);
+
+    /** Current tenant ID */
+    private static final ThreadLocal<String> CURRENT_TENANT = new ThreadLocal<>();
+
+    /** Default tenant ID */
+    private static final String DEFAULT_TENANT_ID = MultitenantConstants.DEFAULT_TENANT_ID;
 
     private TenantContext() {
         // Private constructor to prevent instantiation
     }
-
-    private static final ThreadLocal<String> CURRENT_TENANT = new ThreadLocal<>();
-    private static final String DEFAULT_TENANT_ID = MultitenantConstants.DEFAULT_TENANT_ID;
 
     /**
      * Get the current tenant ID from thread local context.
@@ -69,8 +73,8 @@ public class TenantContext {
     public static String getCurrentTenant() {
         String tenant = CURRENT_TENANT.get();
         if (tenant == null) {
-            LOGGER.error("No tenant found in context.");
-            throw new TenantNotFoundException("No tenant found in context.");
+            LOGGER.error("No tenant found in context in multitenant mode.");
+            throw new TenantNotFoundException("No tenant found in context in multitenant mode.");
         }
         return tenant;
     }
