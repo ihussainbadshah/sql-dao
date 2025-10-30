@@ -49,7 +49,7 @@ package org.eclipse.ecsp.sql.multitenancy;
  * - DefaultDbProperties: Used for single-tenant mode with @Value annotations
  * 
  * @author hbadshah
- * @version 1.1
+ * @version 1.9
  * @since 2025-10-28
  */
 public interface DatabaseProperties {
