@@ -61,8 +61,22 @@ public class TenantContext {
     /** Default tenant ID */
     private static final String DEFAULT_TENANT_ID = MultitenantConstants.DEFAULT_TENANT_ID;
 
+    /** Static holder for multitenancy enabled flag */
+    private static boolean multitenancyEnabled = false;
+
     private TenantContext() {
         // Private constructor to prevent instantiation
+    }
+
+    /**
+     * Initialize multitenancy flag. Should be called by Spring configuration class.
+     * This method is called from PostgresDbConfig during bean initialization.
+     *
+     * @param enabled whether multitenancy is enabled
+     */
+    public static void initialize(boolean enabled) {
+        multitenancyEnabled = enabled;
+        LOGGER.info("TenantContext initialized with multitenancy.enabled={}", enabled);
     }
 
     /**
@@ -85,7 +99,10 @@ public class TenantContext {
      * @param tenant the tenant ID to set
      */
     public static void setCurrentTenant(String tenant) throws TenantNotFoundException {
-        boolean isMultitenancyEnabled = Boolean.parseBoolean(System.getProperty(MultitenantConstants.MULTITENANCY_ENABLED));
+        // Check multitenancy flag: Spring config takes precedence, fall back to System property for unit tests
+        boolean isMultitenancyEnabled = multitenancyEnabled || 
+            Boolean.parseBoolean(System.getProperty(MultitenantConstants.MULTITENANCY_ENABLED));
+            
         if (!isMultitenancyEnabled) {
             LOGGER.info("Multitenancy is disabled. Setting default tenant.");
             tenant = DEFAULT_TENANT_ID;
