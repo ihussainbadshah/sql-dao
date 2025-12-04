@@ -41,6 +41,7 @@ package org.eclipse.ecsp.sql.multitenancy;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.eclipse.ecsp.sql.dao.constants.PostgresDbConstants;
 
 /**
  * Database configuration properties for multi-tenant mode.
@@ -67,61 +68,61 @@ public class TenantDatabaseProperties implements DatabaseProperties {
 	private String password;
 
 	// Driver class name
-	private String driverClassName = "org.postgresql.Driver";
+	private String driverClassName = PostgresDbConstants.DEFAULT_DRIVER_CLASS_NAME;
 
 	// Pool name
-	private String poolName = "defaultPool";
+	private String poolName = PostgresDbConstants.DEFAULT_POOL_NAME;
 
 	// Connection timeout in ms
-	private int connectionTimeoutMs = 60000;
+	private int connectionTimeoutMs = PostgresDbConstants.DEFAULT_CONNECTION_TIMEOUT_MS;
 
 	// Minimum pool size
-	private int minPoolSize = 1;
+	private int minPoolSize = PostgresDbConstants.DEFAULT_MIN_POOL_SIZE;
 
 	// Maximum pool size
-	private int maxPoolSize = 10;
+	private int maxPoolSize = PostgresDbConstants.DEFAULT_MAX_POOL_SIZE;
 
 	// Maximum idle time in seconds
-	private int maxIdleTime = 600;
+	private int maxIdleTime = PostgresDbConstants.DEFAULT_MAX_IDLE_TIME;
 
 	// Cache prepared statements
-	private String cachePrepStmts = "true";
+	private String cachePrepStmts = PostgresDbConstants.DEFAULT_CACHE_PREP_STMTS;
 
 	// Prepared statement cache size
-	private int prepStmtCacheSize = 250;
+	private int prepStmtCacheSize = PostgresDbConstants.DEFAULT_PREP_STMT_CACHE_SIZE;
 
 	// Prepared statement cache SQL limit
-	private int prepStmtCacheSqlLimit = 2048;
+	private int prepStmtCacheSqlLimit = PostgresDbConstants.DEFAULT_PREP_STMT_CACHE_SQL_LIMIT;
 
 	// Expected 99th percentile ms value
-	private String expected99thPercentileMsValue = "60000";
+	private String expected99thPercentileMsValue = PostgresDbConstants.DEFAULT_EXPECTED_99TH_PERCENTILE_MS;
 
 	// Credential provider bean name
-	private String credentialProviderBeanName = "org.eclipse.ecsp.sql.authentication.DefaultPostgresDbCredentialsProvider";
+	private String credentialProviderBeanName = PostgresDbConstants.DEFAULT_CREDENTIAL_PROVIDER_BEAN_NAME;
 
 	// Credentials refresh enabled
-	private boolean postgresCredRefreshEnabled = false;
+	private boolean postgresCredRefreshEnabled = PostgresDbConstants.DEFAULT_CREDS_REFRESH_ENABLED;
 
 	// Data source retry count
-	private int dataSourceRetryCount = 3;
+	private int dataSourceRetryCount = PostgresDbConstants.DEFAULT_DATASOURCE_RETRY_COUNT;
 
 	// Data source retry delay in ms
-	private int dataSourceRetryDelay = 10;
+	private int dataSourceRetryDelay = PostgresDbConstants.DEFAULT_DATASOURCE_RETRY_DELAY;
 
 	// Connection retry count
-	private int connectionRetryCount = 3;
+	private int connectionRetryCount = PostgresDbConstants.DEFAULT_CONNECTION_RETRY_COUNT;
 
 	// Connection retry delay in ms
-	private int connectionRetryDelay = 10;
+	private int connectionRetryDelay = PostgresDbConstants.DEFAULT_CONNECTION_RETRY_DELAY;
 
 	// Auth mechanism
 	private String authMechanism = "";
 
 	// SSL mode
-	private String sslMode = "prefer";
+	private String sslMode = PostgresDbConstants.DEFAULT_SSL_MODE;
 
 	// SSL response timeout
-	private int sslResponseTimeout = 5000;
+	private int sslResponseTimeout = PostgresDbConstants.DEFAULT_SSL_RESPONSE_TIMEOUT;
 
 	// Root certificate path
 	private String rootCrtPath = "";
