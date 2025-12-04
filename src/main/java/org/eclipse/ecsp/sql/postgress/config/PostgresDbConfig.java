@@ -126,7 +126,7 @@ import static org.postgresql.PGProperty.SSL_ROOT_CERT;
 public class PostgresDbConfig {
 
     /** Comma-separated list of tenant IDs */
-    @Value("#{'${" + MultitenantConstants.MULTI_TENANT_IDS + "}'.split(',')}")
+    @Value("#{'${" + MultitenantConstants.MULTI_TENANT_IDS + ":}'.split(',')}")
     private List<String> tenantIds;
 
     /** Flag to enable or disable multi-tenancy */
