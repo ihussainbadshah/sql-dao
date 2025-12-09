@@ -170,15 +170,18 @@ public class IgnitePostgresDbMetricsExporter {
                     + MetricsConstants.POSTGRES_METRIC_PENDING_CONNECTIONS);
             LOGGER.info("Created Metrics list for default tenant: {}", metricsList);
         } else {
-            for (Map.Entry<String, TenantDatabaseProperties> entry 
-                    : multiTenantHealthProps.getTenants().entrySet()) {
+            for (Map.Entry<String, TenantDatabaseProperties> entry : multiTenantHealthProps.getTenants().entrySet()) {
                 TenantDatabaseProperties tenantHealthProps = entry.getValue();
-                metricsList.add(tenantHealthProps.getPoolName() + MetricsConstants.POSTGRES_METRIC_TOTAL_CONNECTIONS);
-                metricsList.add(tenantHealthProps.getPoolName() + MetricsConstants.POSTGRES_METRIC_ACTIVE_CONNECTIONS);
-                metricsList.add(tenantHealthProps.getPoolName() + MetricsConstants.POSTGRES_METRIC_IDLE_CONNECTIONS);
-                metricsList.add(tenantHealthProps.getPoolName() + MetricsConstants.POSTGRES_METRIC_PENDING_CONNECTIONS);
-                LOGGER.info("Created Metrics list for tenant {}: {}", entry.getKey(), metricsList);
+                metricsList.add(tenantHealthProps.getPoolName()
+                        + MetricsConstants.POSTGRES_METRIC_TOTAL_CONNECTIONS);
+                metricsList.add(tenantHealthProps.getPoolName()
+                        + MetricsConstants.POSTGRES_METRIC_ACTIVE_CONNECTIONS);
+                metricsList.add(tenantHealthProps.getPoolName()
+                        + MetricsConstants.POSTGRES_METRIC_IDLE_CONNECTIONS);
+                metricsList.add(tenantHealthProps.getPoolName()
+                        + MetricsConstants.POSTGRES_METRIC_PENDING_CONNECTIONS);
             }
+            LOGGER.info("Created Metrics list for tenant {}: {}", entry.getKey(), metricsList);
         }
     }
 
