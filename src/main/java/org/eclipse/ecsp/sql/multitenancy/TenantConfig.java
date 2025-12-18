@@ -48,7 +48,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Configuration class for multi-tenant database properties.
  * Exposes a Map bean bound to the "tenant" prefix to allow direct binding
- * of properties like tenant.tenantA.jdbc-url without the redundant "tenants" level.
+ * of properties like tenants.profile.tenantA.jdbc-url without the redundant "tenants" level.
  * 
  * @author hbadshah
  * @version 1.1
@@ -60,12 +60,12 @@ public class TenantConfig {
     /**
      * Creates a Map bean for tenant database properties.
      * Properties with prefix "tenant" will be bound as map entries.
-     * For example: tenant.tenantA.jdbc-url will create a map entry with key "tenantA".
+     * For example: tenants.profile.tenantA.jdbc-url will create a map entry with key "tenantA".
      *
      * @return Map of tenant IDs to their database properties
      */
     @Bean("tenantConfigMap")
-    @ConfigurationProperties(prefix = "tenant")
+    @ConfigurationProperties(prefix = "tenants.profile")
     public Map<String, TenantDatabaseProperties> tenantConfigMap() {
         return new HashMap<>();
     }

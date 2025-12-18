@@ -50,8 +50,8 @@ import org.eclipse.ecsp.sql.dao.constants.PostgresDbConstants;
  * using the property prefix "tenant" defined in TenantConfig.
  * 
  * Used for both single-tenant and multi-tenant modes:
- * - Single-tenant: tenant.default.* properties
- * - Multi-tenant: tenant.{tenantId}.* properties
+ * - Single-tenant: tenants.profile.default.* properties
+ * - Multi-tenant: tenants.profile.{tenantId}.* properties
  * 
  * @author hbadshah
  * @version 2.0
