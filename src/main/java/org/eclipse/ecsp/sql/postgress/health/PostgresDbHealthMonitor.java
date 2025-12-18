@@ -81,8 +81,8 @@ public class PostgresDbHealthMonitor implements HealthMonitor {
 
     /** Configuration map for all the tenant IDs. */
     @Autowired
-    @Qualifier("tenants")
-    private Map<String, TenantDatabaseProperties> multiTenantHealthProps;
+    @Qualifier("tenantConfigMap")
+    private Map<String, TenantDatabaseProperties> tenantConfigMap;
 
     /** Target data sources for each tenant ID. */
     @Autowired
@@ -110,8 +110,16 @@ public class PostgresDbHealthMonitor implements HealthMonitor {
     @PostConstruct
     public void init() {
         healthCheckList = new ArrayList<>();
+        if (!isMultitenancyEnabled) {
+            healthCheckList.add(tenantConfigMap.get(MultitenantConstants.DEFAULT_TENANT_ID).getPoolName()
+                    + HealthConstants.POOL_CONNECTIVITY_HEALTH_CHECK);
+            healthCheckList.add(tenantConfigMap.get(MultitenantConstants.DEFAULT_TENANT_ID).getPoolName()
+                    + HealthConstants.POOL_CONNECTION_99_PERCENT_HEALTH_CHECK);
+            logger.info("Initialized health check list for default tenant: {}", healthCheckList);
+            return;
+        }
         for (Map.Entry<String, TenantDatabaseProperties> tenantHealthProps 
-                : multiTenantHealthProps.entrySet()) {
+                : tenantConfigMap.entrySet()) {
             healthCheckList.add(tenantHealthProps.getValue().getPoolName()
                     + HealthConstants.POOL_CONNECTIVITY_HEALTH_CHECK);
             healthCheckList.add(tenantHealthProps.getValue().getPoolName()

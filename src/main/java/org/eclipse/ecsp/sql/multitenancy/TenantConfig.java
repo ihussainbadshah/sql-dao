@@ -64,9 +64,9 @@ public class TenantConfig {
      *
      * @return Map of tenant IDs to their database properties
      */
-    @Bean
+    @Bean("tenantConfigMap")
     @ConfigurationProperties(prefix = "tenant")
-    public Map<String, TenantDatabaseProperties> tenants() {
+    public Map<String, TenantDatabaseProperties> tenantConfigMap() {
         return new HashMap<>();
     }
 }

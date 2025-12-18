@@ -112,7 +112,7 @@ class PostgresDbHealthMonitorUnitTest {
         TenantDatabaseProperties tenantHealthProps = new TenantDatabaseProperties();
         tenantHealthProps.setPoolName("testPool");
         Map<String, TenantDatabaseProperties> tenantMap = Map.of("default", tenantHealthProps);
-        ReflectionTestUtils.setField(postgresDbHealthMonitor, "multiTenantHealthProps",
+        ReflectionTestUtils.setField(postgresDbHealthMonitor, "tenantConfigMap",
                 tenantMap);
         Map.Entry<String, DataSource> entry = mock(Map.Entry.class);
         when(targetDataSources.entrySet()).thenReturn(Set.of(entry));

@@ -88,7 +88,7 @@ class PostgresDbMetricsExporterUnitTest {
         TenantDatabaseProperties tenantHealthProps = new TenantDatabaseProperties();
         tenantHealthProps.setPoolName("test");
         Map<String, TenantDatabaseProperties> tenantMap = Map.of("default", tenantHealthProps);
-        ReflectionTestUtils.setField(exporter, "multiTenantHealthProps", tenantMap);
+        ReflectionTestUtils.setField(exporter, "tenantConfigMap", tenantMap);
         ReflectionTestUtils.setField(exporter, "postgresDbMetricsEnabled", true);
         ReflectionTestUtils.setField(exporter, "threadInitialDelay", 0);
         ReflectionTestUtils.setField(exporter, "threadFrequency", 1);

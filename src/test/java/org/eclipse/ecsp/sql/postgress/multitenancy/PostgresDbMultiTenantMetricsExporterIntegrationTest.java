@@ -102,7 +102,7 @@ class PostgresDbMultiTenantMetricsExporterIntegrationTest {
     private Map<String, DataSource> targetDataSources;
 
     @Autowired
-    @Qualifier("tenants")
+    @Qualifier("tenantConfigMap")
     private Map<String, TenantDatabaseProperties> multiTenantDatabaseProperties;
 
     /** Testcontainer for tenant1 */

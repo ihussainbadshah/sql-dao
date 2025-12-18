@@ -112,8 +112,8 @@ public class IgnitePostgresDbMetricsExporter {
 
     /** Configuration map for all the tenant IDs. */
     @Autowired
-    @Qualifier("tenants")
-    private Map<String, TenantDatabaseProperties> multiTenantHealthProps;
+    @Qualifier("tenantConfigMap")
+    private Map<String, TenantDatabaseProperties> tenantConfigMap;
 
     /** Target data sources for each tenant ID. */
     @Autowired
@@ -157,7 +157,21 @@ public class IgnitePostgresDbMetricsExporter {
      */
     private void createMetricsList() {
         metricsList = new ArrayList<>();
-        for (Map.Entry<String, TenantDatabaseProperties> entry : multiTenantHealthProps.entrySet()) {
+        if (!isMultitenancyEnabled) {
+            TenantDatabaseProperties tenantHealthProps =
+                    tenantConfigMap.get(MultitenantConstants.DEFAULT_TENANT_ID);
+            metricsList.add(tenantHealthProps.getPoolName()
+                    + MetricsConstants.POSTGRES_METRIC_TOTAL_CONNECTIONS);
+            metricsList.add(tenantHealthProps.getPoolName()
+                    + MetricsConstants.POSTGRES_METRIC_ACTIVE_CONNECTIONS);
+            metricsList.add(tenantHealthProps.getPoolName()
+                    + MetricsConstants.POSTGRES_METRIC_IDLE_CONNECTIONS);
+            metricsList.add(tenantHealthProps.getPoolName()
+                    + MetricsConstants.POSTGRES_METRIC_PENDING_CONNECTIONS);
+            LOGGER.info("Created Metrics list for default tenant: {}", metricsList);
+            return;
+        }
+        for (Map.Entry<String, TenantDatabaseProperties> entry : tenantConfigMap.entrySet()) {
             TenantDatabaseProperties tenantHealthProps = entry.getValue();
             metricsList.add(tenantHealthProps.getPoolName()
                     + MetricsConstants.POSTGRES_METRIC_TOTAL_CONNECTIONS);
