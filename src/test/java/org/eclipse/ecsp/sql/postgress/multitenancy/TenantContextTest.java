@@ -37,7 +37,7 @@
  *
  */
 
-package org.eclipse.ecsp.sql.multitenancy;
+package org.eclipse.ecsp.sql.postgress.multitenancy;
 
 import org.eclipse.ecsp.sql.dao.constants.MultitenantConstants;
 import org.eclipse.ecsp.sql.exception.TenantNotFoundException;
