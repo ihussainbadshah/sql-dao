@@ -94,6 +94,7 @@
 		<hikaricp.version>5.0.1</hikaricp.version>
 		<awaitility.version>4.3.0</awaitility.version>
 		<prometheus.client.version>0.6.0</prometheus.client.version>
+        <testcontainers.version>2.0.3</testcontainers.version>
 		<spring.boot.version>4.0.2</spring.boot.version>
 		<lombok.version>1.18.42</lombok.version>
 		<postgres.version>42.7.3</postgres.version>
@@ -153,14 +154,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>1.19.6</version>
+			<artifactId>testcontainers-postgresql</artifactId>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>1.19.6</version>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
+			<version>${testcontainers.version}</version>
 			<scope>test</scope>
 			<exclusions>
 				<exclusion>
