@@ -49,7 +49,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -81,7 +81,7 @@ class PostgresDbConfigRefreshTest {
     @Qualifier("targetDataSources")
     private Map<String, DataSource> targetDataSources;
     
-    @SpyBean
+    @MockitoSpyBean
     private PostgresDbConfig config;
     
     /** The postgresql container. */
