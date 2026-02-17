@@ -55,7 +55,7 @@ import org.testcontainers.junit.jupiter.Container;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * Test class for {@link PostgresDbConfig}.
  */

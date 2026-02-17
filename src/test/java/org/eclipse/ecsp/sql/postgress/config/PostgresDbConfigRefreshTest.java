@@ -59,7 +59,7 @@ import io.prometheus.client.CollectorRegistry;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.Map;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
